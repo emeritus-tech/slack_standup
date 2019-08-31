@@ -1,0 +1,6 @@
+require 'json'
+require 'slack-ruby-bot'
+require 'slack_standup/commands/random'
+require 'slack_standup/commands/joke'
+require 'slack_standup/bot'
+require 'slack_standup/web'
