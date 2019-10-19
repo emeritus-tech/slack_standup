@@ -15,4 +15,6 @@ Thread.new do
   end
 end
 
+
+use Rack::Static, urls: ["/hey.png"], root: "public"
 run SlackStandup::Web.new

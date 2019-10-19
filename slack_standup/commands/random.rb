@@ -1,8 +1,18 @@
 module SlackStandup
   module Commands
     class Random < SlackRubyBot::Commands::Base
-      command 'list' do |client, data, _match|
-        text = ENV.fetch('USERS').split(',').shuffle.join("\n")
+      BLACKLISTED_ENV_VARS = ['SLACK_API_TOKEN', 'SLACK_RUBY_BOT_ALIASES']
+
+      def self.blacklisted_env_vars
+        BLACKLISTED_ENV_VARS.map { |v| "(#{v})" }.join('|')
+      end
+
+      match %r{^.*list for (?<team>\w*).*$} do |client, data, match|
+        team = match[:team].upcase.gsub(%r{#{blacklisted_env_vars}}, '')
+        text = ENV.fetch(team, '').split(',').shuffle.join("\n")
+        if text.empty?
+          text = "Sorry, I don't have names for #{team.empty? ? 'that' : team} team."
+        end
         client.say(channel: data.channel, text: text)
       end
     end

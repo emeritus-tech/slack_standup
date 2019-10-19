@@ -4,8 +4,8 @@ module SlackStandup
       title 'EE Standup Bot'
       desc 'This bot helps you build a randomized list for the standup :see_no_evil:'
 
-      command 'list' do
-        desc 'Generates a list of people with random order to use in the standup'
+      command 'list for <team>' do
+        desc 'Generates a randomly ordered list of people for the team specified'
       end
 
       command 'joke' do
