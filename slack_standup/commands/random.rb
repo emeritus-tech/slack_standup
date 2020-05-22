@@ -15,6 +15,24 @@ module SlackStandup
         end
         client.say(channel: data.channel, text: text)
       end
+
+      match %r{^.*CRs for (?<team>\w*).*$} do |client, data, match|
+        team = match[:team].upcase.gsub(%r{#{blacklisted_env_vars}}, '')
+        text = ENV.fetch(team, '').split(',').shuffle.take(2).join("\n")
+        if text.empty?
+          text = "Sorry, I don't have names for #{team.empty? ? 'that' : team} team."
+        end
+        client.say(channel: data.channel, text: text)
+      end
+
+      match %r{^.*QA for (?<team>\w*).*$} do |client, data, match|
+        team = match[:team].upcase.gsub(%r{#{blacklisted_env_vars}}, '')
+        text = ENV.fetch(team, '').split(',').sample
+        if text.empty?
+          text = "Sorry, I don't have names for #{team.empty? ? 'that' : team} team."
+        end
+        client.say(channel: data.channel, text: text)
+      end
     end
   end
 end
